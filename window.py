@@ -3,7 +3,10 @@ import db_setup
 from db_setup import Base
 from tkinter import ttk
 from sqlalchemy.orm import sessionmaker
-from models import Stage
+from models import Stage,Enseignant,Entreprise,Etudiant
+from sqlalchemy.orm import aliased
+from sqlalchemy import and_
+from sqlalchemy import func
 
 # Global variable for database session
 db_session = None
@@ -80,7 +83,7 @@ def display_results_on_gui(results, columns):
 # Button click function to execute ORM queries
 def on_button_click(button_number):
     if db_session is None:
-        print("No active connection. Please connect first.")
+        show_error_message("No active connection. Please connect first.")
         return
 
     print(f"Button {button_number} clicked!")
@@ -88,21 +91,55 @@ def on_button_click(button_number):
     columns = []
 
     if button_number == 1:
-        stages = db_session.query(Stage).all()
-        columns = Stage.__table__.columns.keys()
-        results = [[getattr(stage, col) for col in columns] for stage in stages]
+        query = (
+            db_session.query(Etudiant.nom, Etudiant.prenom)
+            .join(Stage, Stage.idetudiant == Etudiant.idetudiant)
+            .filter(
+                Stage.etat == "En cours",
+                Stage.datevisite != None
+            )
+            .all()
+        )
+        columns = ["nom", "prenom"]
+        results = [list(row) for row in query]
     elif button_number == 2:
-        stages = db_session.query(Stage.name).filter(Stage.duration > 3).all()
-        columns = ["name"]
-        results = [[stage.name] for stage in stages]
+        StageAlias = aliased(Stage)
+        query = (
+            db_session.query(Etudiant.nom, Etudiant.prenom, Etudiant.filiere)
+            .outerjoin(
+                StageAlias,
+                and_(
+                    StageAlias.idetudiant == Etudiant.idetudiant,
+                    StageAlias.etat == "en cours"
+                )
+            )
+            .filter(StageAlias.idstage == None)
+            .all()
+        )
+        columns = ["nom", "prenom", "filiere"]
+        results = [list(row) for row in query]
     elif button_number == 3:
-        count = db_session.query(Stage).count()
-        columns = ["count"]
-        results = [[count]]
-    elif button_number == 4:
-        stages = db_session.query(Stage).order_by(Stage.start_date.desc()).all()
-        columns = Stage.__table__.columns.keys()
-        results = [[getattr(stage, col) for col in columns] for stage in stages]
+        query = (
+            db_session.query(Entreprise.nomentreprise, Entreprise.email)
+            .join(Stage, Entreprise.identreprise == Stage.identreprise)
+            .outerjoin(
+                Etudiant,
+                and_(
+                    Etudiant.idetudiant == Stage.idetudiant,
+                    Etudiant.filiere == 'Informatique'
+                )
+            )
+            .group_by(Entreprise.identreprise, Entreprise.nomentreprise, Entreprise.email)
+            .having(func.count(Etudiant.idetudiant) == 0)
+            .all()
+        )
+        columns = ["nomentreprise", "email"]
+        results = [list(row) for row in query]
+        
+    # elif button_number == 4:
+    #     stages = a
+    #     columns = Stage.__table__.columns.keys()
+    #     results = [[getattr(stage, col) for col in columns] for stage in stages]
 
     execute_query(results, columns)
 

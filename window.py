@@ -37,6 +37,7 @@ def connect_to_db():
         db_session = SessionLocal()
 
         hide_error_message()
+        hide_info_message()
         print("Connection successful!")
         return db_session
 
@@ -55,6 +56,14 @@ def hide_error_message():
     global error_label
     if error_label:
         error_label.config(text="")
+
+def show_info_message(message):
+    if info_label:
+        info_label.config(text=message, fg="blue")
+
+def hide_info_message():
+    if info_label:
+        info_label.config(text="")
 
 # Function to execute a query and display the result
 def execute_query(results, columns):
@@ -91,6 +100,7 @@ def on_button_click(button_number):
     columns = []
 
     if button_number == 1:
+        show_info_message('le nom et prénom des étudiants pour lesquels le prof a effectué une visite pour leur stage en cours')
         query = (
             db_session.query(Etudiant.nom, Etudiant.prenom)
             .join(Stage, Stage.idetudiant == Etudiant.idetudiant)
@@ -103,6 +113,7 @@ def on_button_click(button_number):
         columns = ["nom", "prenom"]
         results = [list(row) for row in query]
     elif button_number == 2:
+        show_info_message("les noms (Nom, Prénom) et la filière de tous les étudiants qui n'ont actuellement aucun stage à l'état 'en cours'")
         StageAlias = aliased(Stage)
         query = (
             db_session.query(Etudiant.nom, Etudiant.prenom, Etudiant.filiere)
@@ -119,6 +130,7 @@ def on_button_click(button_number):
         columns = ["nom", "prenom", "filiere"]
         results = [list(row) for row in query]
     elif button_number == 3:
+        show_info_message("Lister les noms et emails des entreprises qui offrent au moins un stage mais dont aucun stage n'a jamais été attribué à un étudiant de la filière 'Informatique'")
         query = (
             db_session.query(Entreprise.nomentreprise, Entreprise.email)
             .join(Stage, Entreprise.identreprise == Stage.identreprise)
@@ -150,6 +162,8 @@ def close_connection():
         db_session.close()
         db_session = None
         submit_button.config(state=tk.ACTIVE)
+        hide_info_message()
+        hide_error_message()
         print("Connection closed.")
         update_buttons_state()
 
@@ -190,6 +204,10 @@ port_entry.insert(0, "5432")
 # Error message label
 error_label = tk.Label(root, text="", fg="red")
 error_label.pack(pady=5)
+
+# Info message label (not for errors)
+info_label = tk.Label(root, text="", fg="blue", wraplength=500, justify="left")
+info_label.pack(pady=5)
 
 # Submit button
 submit_button = tk.Button(root, text="Connect", command=on_submit)

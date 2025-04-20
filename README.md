@@ -1,6 +1,11 @@
 # IFT2935
 
 ## guide installation pour coequipier
+# guide import database
+ - ouvrir terminal dans ce folder et run **psql -U postgres -c "CREATE DATABASE {databaseName};"**
+ - run **pg_restore -U {username} -d {databaseName} --clean --create --if-exists --no-owner "groupe15ProjetFinal.sql"**
+
+# guide execution du programme
  - ouvrir terminal, run ce command: **python -m venv .venv** pour créer python environnement pour ce projet (optionel)
  - si vous avez créé un environnement run **.venv\Scripts\activate** pour accéder à l'environnement
  - run **pip install -r requirements.txt**
@@ -13,6 +18,11 @@
 - maintenant vous pouvez click run dans window.py pour démarrer l'application
 
 ## guide installation pour tpist
+# guide import database
+ - ouvrir terminal dans ce folder et run **psql -U postgres -c "CREATE DATABASE {databaseName};"**
+ - run **pg_restore -U {username} -d {databaseName} --clean --create --if-exists --no-owner "groupe15ProjetFinal.sql"**
+   
+# guide execution du programme
  - ouvrir terminal, run ce command: **python -m venv .venv** pour créer python environnement pour ce projet (optionel)
  - si vous avez créé un environnement run **.venv\Scripts\activate** pour accéder à l'environnement
  - run **pip install -r requirements.txt && python window.py**

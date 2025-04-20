@@ -2,8 +2,8 @@
 
 ## guide installation pour coequipier
 ### guide import database
- - ouvrir terminal dans ce folder et run **psql -U postgres -c "CREATE DATABASE {databaseName};"**
- - run **pg_restore -U {username} -d {databaseName} --clean --create --if-exists --no-owner "groupe15ProjetFinal.sql"**
+ - ouvrir terminal dans ce folder et run **psql -U postgres -c "CREATE DATABASE *databaseName*;"**
+ - run **pg_restore -U *username* -d *databaseName* --clean --if-exists --no-owner ProjetFinal.backup**
 
 ### guide execution du programme
  - ouvrir terminal, run ce command: **python -m venv .venv** pour créer python environnement pour ce projet (optionel)
@@ -19,8 +19,8 @@
 
 ## guide installation pour tpist
 ### guide import database
- - ouvrir terminal dans ce folder et run **psql -U postgres -c "CREATE DATABASE {databaseName};"**
- - run **pg_restore -U {username} -d {databaseName} --clean --create --if-exists --no-owner "groupe15ProjetFinal.sql"**
+ - ouvrir terminal dans ce folder et run **psql -U postgres -c "CREATE DATABASE *databaseName*;"**
+ - run **pg_restore -U *username* -d *databaseName* --clean --if-exists --no-owner ProjetFinal.backup**
    
 ### guide execution du programme
  - ouvrir terminal, run ce command: **python -m venv .venv** pour créer python environnement pour ce projet (optionel)

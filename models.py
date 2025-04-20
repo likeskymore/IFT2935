@@ -31,7 +31,7 @@ class Entreprise(Base):
     identreprise = Column(Integer, primary_key=True, autoincrement=True)
     nomentreprise = Column(String, nullable=False)
     adresse = Column(String, nullable=False)
-    secteuractivitees = Column(String, nullable=False)
+    secteuractivites = Column(String, nullable=False)
     telephone = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
     stageanterieures = Column(String, nullable=True)

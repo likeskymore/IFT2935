@@ -102,7 +102,7 @@ def on_button_click(button_number):
     columns = []
 
     if button_number == 1:
-        show_info_message("les noms et la filière de tous les étudiants qui n’ont actuellement aucun stage à l’état ’En cours’")
+        show_info_message("les noms et la filière de tous les étudiants qui n’ont actuellement aucun stage à l’état ’Actif’")
         StageAlias = aliased(Stage)
         query = (
             db_session.query(Etudiant.nom, Etudiant.prenom, Etudiant.filiere)
@@ -110,7 +110,7 @@ def on_button_click(button_number):
                 StageAlias,
                 and_(
                     StageAlias.idetudiant == Etudiant.idetudiant,
-                    StageAlias.etat == "En cours"
+                    StageAlias.etat == "Actif"
                 )
             )
             .filter(StageAlias.idstage == None)

@@ -8,7 +8,8 @@
 ### guide execution du programme
  - ouvrir terminal, run ce command: **python -m venv .venv** pour créer python environnement pour ce projet (optionel)
  - si vous avez créé un environnement run **.venv\Scripts\activate** pour accéder à l'environnement
- - run **pip install -r requirements.txt && python window.py**
+ - run **pip install -r requirements.txt && python window.py**\
+   (**Powershell**: pip install -r requirements.txt ; python window.py)
 
 ## guide installation pour coequipier
 ### guide import database

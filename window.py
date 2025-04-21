@@ -102,17 +102,21 @@ def on_button_click(button_number):
     columns = []
 
     if button_number == 1:
-        show_info_message('Le nom et prénom des étudiants pour lesquels le prof a effectué une visite pour leur stage en cours')
+        show_info_message("les noms et la filière de tous les étudiants qui n’ont actuellement aucun stage à l’état ’En cours’")
+        StageAlias = aliased(Stage)
         query = (
-            db_session.query(Etudiant.nom, Etudiant.prenom)
-            .join(Stage, Stage.idetudiant == Etudiant.idetudiant)
-            .filter(
-                Stage.etat == "En cours",
-                Stage.datevisite != None
+            db_session.query(Etudiant.nom, Etudiant.prenom, Etudiant.filiere)
+            .outerjoin(
+                StageAlias,
+                and_(
+                    StageAlias.idetudiant == Etudiant.idetudiant,
+                    StageAlias.etat == "En cours"
+                )
             )
+            .filter(StageAlias.idstage == None)
             .all()
         )
-        columns = ["nom", "prenom"]
+        columns = ["nom", "prenom", "filiere"]
         results = [list(row) for row in query]
 
 
